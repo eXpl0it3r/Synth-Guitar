@@ -40,10 +40,10 @@ void World::load_level(const std::string& filename)
     for(auto& rect : level["tiles"])
     {
         base_tiles.emplace_back();
-        base_tiles.back().texture(m_textures["level"], {rect[0], rect[1], m_tile_size, m_tile_size});
+        base_tiles.back().texture(m_textures["level"], {rect[0], rect[1], static_cast<int>(m_tile_size), static_cast<int>(m_tile_size)});
     }
 
-    m_empty_tile.texture(m_textures["level"], {level["empty_tile"][0], level["empty_tile"][1], m_tile_size, m_tile_size});
+    m_empty_tile.texture(m_textures["level"], {level["empty_tile"][0], level["empty_tile"][1],static_cast<int>( m_tile_size), static_cast<int>(m_tile_size)});
 
     // Load board
     std::size_t x = 0;
@@ -63,7 +63,7 @@ void World::load_level(const std::string& filename)
 
             // Copy base tile
             m_tiles[index] = base_tiles[tile];
-            m_tiles[index].setPosition({x * m_tile_size, y * m_tile_size});
+            m_tiles[index].setPosition({static_cast<float>(x * m_tile_size), static_cast<float>(y * m_tile_size)});
 
             ++x;
         };
@@ -86,7 +86,7 @@ void World::load_level(const std::string& filename)
             m_logic[y * m_dimension.x + x] = tile;
 
             if(tile == 1)
-                m_spawn = {x * m_tile_size, y * m_tile_size};
+                m_spawn = {static_cast<float>(x * m_tile_size), static_cast<float>(y * m_tile_size)};
 
             ++x;
         }
