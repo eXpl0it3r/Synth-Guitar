@@ -1,12 +1,16 @@
 cmake_minimum_required(VERSION 3.2)
-project(LD48-32)
+project(Synth-Guitar)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -static")
+
+# set default build type explicitly to Release
+if (NOT CMAKE_BUILD_TYPE)
+	set (CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build type." FORCE)
+endif (NOT CMAKE_BUILD_TYPE)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/)
 
 # Find SFML
-set(SFML_ROOT D:/Programming/C++/Contrib/SFML/install)
 set(SFML_STATIC_LIBRARIES TRUE)
 find_package(SFML REQUIRED COMPONENTS audio graphics window system)
 
@@ -15,7 +19,6 @@ if(NOT SFML_FOUND)
 endif()
 
 # Find Thor
-set(THOR_ROOT D:/Programming/C++/Contrib/Thor/install)
 set(THOR_STATIC_LIBRARIES TRUE)
 find_package(Thor REQUIRED)
 
@@ -23,18 +26,8 @@ if(NOT THOR_FOUND)
 	message(FATAL_ERROR "Thor couldn't be located!")
 endif()
 
-# Find Box2D
-set(BOX2D_ROOT D:/Programming/C++/Contrib/Box2D/install)
-set(BOX2D_STATIC_LIBRARIES TRUE)
-find_package(Box2D REQUIRED)
-
-if(NOT BOX2D_FOUND)
-	message(FATAL_ERROR "Box2D couldn't be located!")
-endif()
-
 include_directories(${SFML_INCLUDE_DIR})
 include_directories(${THOR_INCLUDE_DIR})
-include_directories(${BOX2D_INCLUDE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 set(SOURCE_FILES
@@ -54,6 +47,16 @@ set(SOURCE_FILES
 	src/Player.cpp
 )
 
-add_executable(LD48-32 ${SOURCE_FILES})
+add_executable(Synth-Guitar ${SOURCE_FILES})
 
-target_link_libraries(LD48-32 ${THOR_LIBRARY} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES} ${BOX2D_LIBRARY})
+target_link_libraries(Synth-Guitar ${THOR_LIBRARY} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
+
+# Install executable
+install(TARGETS Synth-Guitar
+	RUNTIME DESTINATION .
+)
+
+# Install game data
+install(DIRECTORY bin/res
+	DESTINATION .
+)
